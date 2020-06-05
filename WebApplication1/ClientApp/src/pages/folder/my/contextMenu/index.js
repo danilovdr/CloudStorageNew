@@ -13,8 +13,14 @@ const ContextMenu = (props) => {
                 className="position-absolute"
                 style={props.coords}
             >
-                <CreateFile addFile={props.addFile} />
-                <CreateFolder addFolder={props.addFolder} />
+                <CreateFile
+                    id={props.id}
+                    addFile={props.addFile}
+                />
+                <CreateFolder
+                    id={props.id}
+                    addFolder={props.addFolder}
+                />
                 <Settings id={props.id} />
             </ButtonGroup>
         )

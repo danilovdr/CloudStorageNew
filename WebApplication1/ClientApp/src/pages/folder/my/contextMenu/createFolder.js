@@ -32,18 +32,9 @@ const CreateFolder = (props) => {
 
     const submit = () => {
         hiddenError();
-        folder.create(name, props.folder)
-            .then(resp => {
-                if (resp.ok) {
-                    close();
-                    resp.json()
-                        .then(json => props.addFolder(json));
-                } else {
-                    resp.json()
-                        .then(json => showError(json.title));
-                }
-            })
-
+        folder.create(name, props.id)
+            .then(resp => resp.json())
+            .then(json => props.addFolder(json));
     };
 
     const close = () => {

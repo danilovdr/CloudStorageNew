@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 import { account, folder, file } from '../../../api';
-import Folder from './folder';
-import File from './file';
+import Folder from './folder/';
+import File from './file/';
 import useFolders from './hooks/useFolders';
 import useFiles from './hooks/useFiles';
-import ContextMenu from './contextMenu/index';
+import ContextMenu from './contextMenu/';
+import CreateFolder from './contextMenu/createFolder';
 
 const MyFolder = (props) => {
     const style = {
@@ -18,9 +19,6 @@ const MyFolder = (props) => {
 
     const [folders, foldersApi] = useFolders(currentFolder);
     const [files, filesApi] = useFiles(currentFolder);
-
-    console.log('files', files);
-    console.log('fodlers', folders);
 
     const [context, contextOpen] = useState(false);
     const [contextCoords, setContextCoords] = useState({
@@ -43,34 +41,6 @@ const MyFolder = (props) => {
 
         isAuthorize()
     }, []);
-
-    const addFolder = (createdFolder = {}) => {
-        folder.create(createdFolder)
-            .then(resp => resp.json())
-            .then(json => foldersApi.add(json));
-    }
-
-    const removeFolder = (id) => {
-        folder.remove(id)
-            .then(foldersApi.remove(id))
-    }
-
-    const addFile = (createdFile = {}) => {
-        file.create(createdFile)
-            .then(resp => resp.json())
-            .then(json => filesApi.add(json));
-    }
-
-    const updateFile = (updatedFile = {}) => {
-        file.update(updatedFile)
-            .then(resp => resp.json())
-            .then(json => filesApi.update(json));
-    }
-
-    const removeFile = (id) => {
-        file.remove(id)
-            .then(filesApi.remove(id));
-    }
 
     const onClick = () => {
         contextOpen(false);
@@ -98,7 +68,7 @@ const MyFolder = (props) => {
                         key={item.id}
                         id={item.id}
                         name={item.name}
-                        remove={removeFolder}
+                        remove={foldersApi.remove}
                     />)}
                 {files.map(item =>
                     <File
@@ -106,16 +76,16 @@ const MyFolder = (props) => {
                         id={item.id}
                         name={item.name}
                         parentId={currentFolder}
-                        update={updateFile}
-                        remove={removeFile}
+                        update={filesApi.update}
+                        remove={filesApi.remove}
                     />)}
             </div>
             <ContextMenu
                 id={currentFolder}
                 isOpen={context}
                 coords={contextCoords}
-                addFile={addFile}
-                addFolder={addFolder}
+                addFile={filesApi.add}
+                addFolder={foldersApi.add}
             />
         </>
     );

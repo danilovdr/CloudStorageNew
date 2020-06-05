@@ -20,7 +20,7 @@ const CreateFile = (props) => {
     const [content, setContent] = useState("");
 
     const submit = () => {
-        file.create(name, content, props.folder)
+        file.create(name, content, props.id)
             .then(resp => resp.json())
             .then(json => {
                 props.addFile(json);

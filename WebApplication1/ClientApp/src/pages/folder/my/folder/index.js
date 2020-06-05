@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
-import img from '../../../img/folder.png';
+import img from '../../../../img/folder.png';
 import {
     Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem
 } from 'reactstrap';
-import Settings from '../../../components/header/settings';
+import Settings from '../../../../components/header/settings';
 
 const FolderIcon = (props) => {
     const iconStyle = {
@@ -23,14 +23,14 @@ const FolderIcon = (props) => {
     const [settings, settingsOpen] = useState(false);
     const [rename, renameOpen] = useState(false);
 
-    const link = () => {
+    const onClick = () => {
         history.push("/folder/my/" + props.id);
     };
 
-    const contextMenu = e => {
-        e.preventDefault();
+    const onContextMenu = event => {
+        event.preventDefault();
         dropdownToggle();
-        e.stopPropagation()
+        event.stopPropagation()
     };
 
     return (
@@ -39,9 +39,10 @@ const FolderIcon = (props) => {
                 style={iconStyle}
                 isOpen={dropdown}
                 toggle={dropdownToggle}
-                onContextMenu={contextMenu}
+                onClick={onClick}
+                onContextMenu={onContextMenu}
             >
-                <DropdownToggle color="link" onClick={link}>
+                <DropdownToggle color="link">
                     <img className="w-100" src={img} alt="folder" />
                     {props.name}
                 </DropdownToggle>
