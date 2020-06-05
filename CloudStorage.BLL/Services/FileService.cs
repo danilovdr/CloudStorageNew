@@ -148,24 +148,20 @@ namespace CloudStorage.BLL.Services
         public List<FileDTO> GetMyFiles(Guid? parentId, Guid userId)
         {
             List<FileDTO> files = new List<FileDTO>();
-            List<FilePermissionModel> filePermissions = _unitOfWork.FilePermissionRepository
-                .Find(p => p.UserId == userId)
+            List<FileModel> fileModels = _unitOfWork.FileRepository
+                .Find(p => p.ParentId == parentId && p.OwnerId == userId)
                 .ToList();
 
-            foreach (FilePermissionModel filePermission in filePermissions)
+            foreach (FileModel fileModel in fileModels)
             {
-                FileModel fileModel = _unitOfWork.FileRepository.Get(filePermission.FileId);
-                if (fileModel.ParentId == parentId)
+                FileDTO fileDTO = new FileDTO()
                 {
-                    FileDTO fileDTO = new FileDTO()
-                    {
-                        Id = fileModel.Id,
-                        Name = fileModel.Name,
-                        Content = fileModel.Content,
-                        ParentId = fileModel.ParentId
-                    };
-                    files.Add(fileDTO);
-                }
+                    Id = fileModel.Id,
+                    Name = fileModel.Name,
+                    Content = fileModel.Content,
+                    ParentId = fileModel.ParentId
+                };
+                files.Add(fileDTO);
             }
 
             return files;

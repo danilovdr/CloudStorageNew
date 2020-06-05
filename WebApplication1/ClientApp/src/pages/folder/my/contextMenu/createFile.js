@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { file } from '../../api';
+import { file } from '../../../../api'
 import {
     Modal,
     ModalHeader,
@@ -19,6 +19,14 @@ const CreateFile = (props) => {
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
 
+    const submit = () => {
+        file.create(name, content, props.folder)
+            .then(resp => resp.json())
+            .then(json => {
+                props.addFile(json);
+                setIsOpen(false);
+            });
+    };
 
     const close = () => {
         setName("");
@@ -29,7 +37,6 @@ const CreateFile = (props) => {
     return (
         <>
             <Button
-                className="ml-3"
                 color="info"
                 onClick={toggleIsOpen}>
                 Создать файл

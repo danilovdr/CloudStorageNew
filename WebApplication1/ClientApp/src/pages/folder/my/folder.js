@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
-import img from '../../img/folder.png';
+import img from '../../../img/folder.png';
 import {
     Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem
 } from 'reactstrap';
-import Settings from '../header/settings';
-import RemoveConfirm from './removeConfirm';
+import Settings from '../../../components/header/settings';
 
 const FolderIcon = (props) => {
     const iconStyle = {
@@ -23,7 +22,6 @@ const FolderIcon = (props) => {
 
     const [settings, settingsOpen] = useState(false);
     const [rename, renameOpen] = useState(false);
-    const [remove, removeOpen] = useState(false);
 
     const link = () => {
         history.push("/folder/my/" + props.id);
@@ -54,7 +52,7 @@ const FolderIcon = (props) => {
                     <DropdownItem onClick={() => renameOpen(true)}>
                         Переименовать
                     </DropdownItem>
-                    <DropdownItem onClick={() => removeOpen(true)}>
+                    <DropdownItem>
                         Удалить
                     </DropdownItem>
                 </DropdownMenu>
@@ -63,12 +61,6 @@ const FolderIcon = (props) => {
                 isOpen={settings}
                 setIsOpen={settingsOpen}
                 id={props.id}
-            />
-            <RemoveConfirm
-                isOpen={remove}
-                setIsOpen={removeOpen}
-                id={props.id}
-                deleteFolder={props.deleteFolder}
             />
         </>
     )

@@ -10,7 +10,5 @@ namespace CloudStorage.BLL.Interfaces.Services
         void DeleteFolder(Guid folderId, Guid userId);
         List<FolderDTO> GetMyFolders(Guid? parentFolderId, Guid userId);
         List<FolderDTO> GetSharedFolders(Guid? parentFolderId, Guid userId);
-        List<FileDTO> GetMyFiles(Guid? parentFolderId, Guid userId);
-        List<FileDTO> GetSharedFiles(Guid? parentFolderId, Guid userId);
     }
 }

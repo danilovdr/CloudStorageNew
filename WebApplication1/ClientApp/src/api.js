@@ -44,15 +44,21 @@ export const file = {
             })
         })
     },
-    update: (id, name, content, folder) => {
+    getMyFiles: (parentId) => {
+        return fetch(getUrl() + "file/my/" + parentId)
+    },
+    getSharedFiles: (parentId) => {
+        return fetch(getUrl(), "file/shared/" + parentId)
+    },
+    update: (file = {}) => {
         return fetch(getUrl() + "file/update", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                Id: id,
-                Name: name,
-                Content: content,
-                ParentId: folder
+                Id: file.id,
+                Name: file.name,
+                Content: file.content,
+                ParentId: file.parentId
             })
         })
     },
@@ -82,6 +88,11 @@ export const folder = {
     },
     getSharedFolder: (id) => {
         return fetch(getUrl() + "folder/shared/" + id)
+    },
+    remove: id => {
+        return fetch(getUrl() + "folder/" + id, {
+            method: "DELETE"
+        });
     }
 }
 

@@ -1,10 +1,10 @@
-import React  from 'react';
+import React from 'react';
 import './App.css';
 import { Route, Redirect } from 'react-router-dom';
 import Authorization from './pages/authorization';
 import Register from './pages/register';
-import MyFolder from './pages/myFolder';
-import SharedFolder from './pages/shareFolder';
+import MyFolder from './pages/folder/my';
+import SharedFolder from './pages/folder/shared';
 
 const App = () => {
   return (

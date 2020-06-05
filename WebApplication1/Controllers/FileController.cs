@@ -62,7 +62,7 @@ namespace CloudStorage.WEB.Controllers
         }
 
         [Authorize]
-        [HttpGet("/my/{parentId?}")]
+        [HttpGet("my/{parentId?}")]
         public IActionResult GetMyFiles(Guid? parentId)
         {
             Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());
@@ -71,7 +71,7 @@ namespace CloudStorage.WEB.Controllers
         }
 
         [Authorize]
-        [HttpGet("/shared/{parentId?}")]
+        [HttpGet("shared/{parentId?}")]
         public IActionResult GetSharedFiles(Guid? parentId)
         {
             Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());

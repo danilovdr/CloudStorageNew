@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
-import img from '../../img/file.png';
-import { file } from '../../api';
+import img from '../../../img/file.png';
+import { file } from '../../../api';
 
 const File = (props) => {
     const iconStyle = {
@@ -15,7 +15,7 @@ const File = (props) => {
 
     const open = () => {
         const getFile = () => {
-            file.get(props.info.id)
+            file.get(props.id)
                 .then(resp => resp.json())
                 .then(json => {
                     setName(json.name);
@@ -26,20 +26,18 @@ const File = (props) => {
         setIsOpen(true);
     };
 
-    console.log(props);
     const update = () => {
-        file.update(props.info.id, name, content, props.info.parentFolderId)
-            .then(resp => resp.json())
-            .then(json => {
-                setName(json.name);
-                setContent(json.content);
-            })
+        let updatedFile = {
+            id: props.id,
+            name: name,
+            content: content,
+            parentId: props.parentId
+        };
+        props.update(updatedFile)
     };
 
-
     const remove = () => {
-        file.remove(props.info.id)
-            .then(() => props.deleteFile(props.info.id));
+        props.remove(props.id);
         setIsOpen(false);
     };
 
@@ -51,7 +49,7 @@ const File = (props) => {
                 onClick={open}
             >
                 <img className="w-100" src={img} alt="file" />
-                {props.info.name}
+                {props.name}
             </Button>
             <Modal isOpen={isOpen}>
                 <ModalHeader>

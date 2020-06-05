@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { folder } from '../../api';
+import { folder } from '../../../../api';
 import {
     Modal,
     ModalHeader,
@@ -32,7 +32,17 @@ const CreateFolder = (props) => {
 
     const submit = () => {
         hiddenError();
-       
+        folder.create(name, props.folder)
+            .then(resp => {
+                if (resp.ok) {
+                    close();
+                    resp.json()
+                        .then(json => props.addFolder(json));
+                } else {
+                    resp.json()
+                        .then(json => showError(json.title));
+                }
+            })
 
     };
 
@@ -45,7 +55,6 @@ const CreateFolder = (props) => {
     return (
         <>
             <Button
-                className="ml-3"
                 color="info"
                 onClick={toggleIsOpen}>
                 Создать папку
