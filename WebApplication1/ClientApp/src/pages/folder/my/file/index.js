@@ -15,6 +15,7 @@ import {
 import img from '../../../../img/file.png';
 import { file } from '../../../../api';
 import Settings from '../../../../components/header/settings';
+import ConfirmRemove from './confirmRemove';
 
 const File = (props) => {
     const iconStyle = {
@@ -23,16 +24,23 @@ const File = (props) => {
     };
 
     const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(!isOpen);
+
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
 
-    const [dropdown, setDropdown] = useState(false);
-    const dropdownToggle = () => setDropdown(!dropdown);
+    const [dropdown, dropdownOpen] = useState(false);
+    const dropdownToggle = () => dropdownOpen(!dropdown);
 
     const [settings, settingsOpen] = useState(false);
+    const settingsToggle = () => settingsOpen(!settings);
+
+    const [confirmRemove, confirmRemoveOpen] = useState(false);
+    const confirmRemoveToggle = () => confirmRemoveOpen(!confirmRemove);
 
     const onClick = (event) => {
         const getFile = () => {
+            event.stopPropagation()
             file.get(props.id)
                 .then(resp => resp.json())
                 .then(json => {
@@ -42,7 +50,6 @@ const File = (props) => {
         }
         getFile();
         setIsOpen(true);
-        event.stopPropagation()
     };
 
     const onContextMenu = (event) => {
@@ -63,10 +70,9 @@ const File = (props) => {
     };
 
     const remove = (event) => {
-        file.remove(props.id)
-            .then(props.remove(props.id))
+        confirmRemoveToggle();
         event.stopPropagation()
-    };
+    }
 
     return (
         <>
@@ -82,17 +88,15 @@ const File = (props) => {
                     {props.name}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem onClick={() => settingsOpen(true)}>
+                    <DropdownItem onClick={settingsToggle}>
                         Настройки
-                    </DropdownItem>
-                    <DropdownItem>
-                        Переименовать
                     </DropdownItem>
                     <DropdownItem onClick={remove}>
                         Удалить
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
+            {/* View */}
             <Modal isOpen={isOpen}>
                 <ModalHeader>
                     <Input
@@ -109,13 +113,21 @@ const File = (props) => {
                 </ModalBody>
                 <ModalFooter>
                     <Button color="info" onClick={update}>Сохранить</Button>
-                    <Button onClick={() => setIsOpen(false)}>Закрыть</Button>
+                    <Button onClick={toggle}>Закрыть</Button>
                 </ModalFooter>
             </Modal>
+            {/* Settings */}
             <Settings
-                isOpen={settings}
-                setIsOpen={settingsOpen}
                 id={props.id}
+                isOpen={settings}
+                toggle={settingsToggle}
+            />
+            {/* Remove */}
+            <ConfirmRemove
+                id={props.id}
+                isOpen={confirmRemove}
+                toggle={confirmRemoveToggle}
+                remove={props.remove}
             />
         </>
     )

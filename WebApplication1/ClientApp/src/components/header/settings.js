@@ -106,7 +106,7 @@ const Settings = (props) => {
                 </Table>
             </ModalBody>
             <ModalFooter>
-                <Button outline onClick={() => props.setIsOpen(false)}>
+                <Button outline onClick={props.toggle}>
                     Закрыть
                     </Button>
             </ModalFooter>

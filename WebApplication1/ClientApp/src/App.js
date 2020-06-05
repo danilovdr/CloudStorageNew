@@ -5,6 +5,7 @@ import Authorization from './pages/authorization';
 import Register from './pages/register';
 import MyFolder from './pages/folder/my';
 import SharedFolder from './pages/folder/shared';
+import Folder from './pages/folder';
 
 const App = () => {
   return (
@@ -12,10 +13,7 @@ const App = () => {
       <Redirect from="/" to="/folder/my" />
       <Route exact path="/authorize" component={Authorization} />
       <Route exact path="/register" component={Register} />
-      <Route exact path="/folder/my" component={MyFolder} />
-      <Route exact path="/folder/my/:id" component={MyFolder} />
-      <Route exact path="/folder/shared" component={SharedFolder} />
-      <Route exact path="/folder/shared/:id" component={SharedFolder} />
+      <Route path="/folder" component={Folder} />
     </div>
   );
 }

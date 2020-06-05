@@ -9,6 +9,7 @@ import {
     DropdownItem
 } from 'reactstrap';
 import Settings from '../../../../components/header/settings';
+import ConfirmRemove from './confirmRemove';
 
 const FolderIcon = (props) => {
     const iconStyle = {
@@ -20,14 +21,22 @@ const FolderIcon = (props) => {
     const [dropdown, setDropdown] = useState(false);
     const dropdownToggle = () => setDropdown(!dropdown);
 
+    const [confirmRemove, confirmRemoveOpen] = useState(false);
+    const confirmRemoveToggle = () => confirmRemoveOpen(!confirmRemove);
+
     const [settings, settingsOpen] = useState(false);
-    const [rename, renameOpen] = useState(false);
+    const settingsToggle = () => settingsOpen(!settings);
+
+    const remove = (event) => {
+        confirmRemoveToggle();
+        event.stopPropagation()
+    }
 
     const onClick = () => {
         history.push("/folder/my/" + props.id);
     };
 
-    const onContextMenu = event => {
+    const onContextMenu = (event) => {
         event.preventDefault();
         dropdownToggle();
         event.stopPropagation()
@@ -47,21 +56,26 @@ const FolderIcon = (props) => {
                     {props.name}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem onClick={() => settingsOpen(true)}>
+                    <DropdownItem onClick={settingsToggle}>
                         Настройки
                     </DropdownItem>
-                    <DropdownItem onClick={() => renameOpen(true)}>
-                        Переименовать
-                    </DropdownItem>
-                    <DropdownItem>
+                    <DropdownItem onClick={remove}>
                         Удалить
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
+            {/* Settings */}
             <Settings
-                isOpen={settings}
-                setIsOpen={settingsOpen}
                 id={props.id}
+                isOpen={settings}
+                toggle={settingsToggle}
+            />
+            {/* Remove */}
+            <ConfirmRemove
+                id={props.id}
+                isOpen={confirmRemove}
+                toggle={confirmRemoveToggle}
+                remove={props.remove}
             />
         </>
     )

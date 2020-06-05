@@ -4,10 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { account, folder, file } from '../../../api';
 import Folder from './folder/';
 import File from './file/';
-import useFolders from './hooks/useFolders';
-import useFiles from './hooks/useFiles';
 import ContextMenu from './contextMenu/';
-import CreateFolder from './contextMenu/createFolder';
 
 const MyFolder = (props) => {
     const style = {
@@ -17,16 +14,19 @@ const MyFolder = (props) => {
     const history = useHistory();
     const [currentFolder, setCurrentFolder] = useState(null);
 
-    const [folders, foldersApi] = useFolders(currentFolder);
-    const [files, filesApi] = useFiles(currentFolder);
+    const [folders, setFolders] = useState([]);
+    const [files, setFiles] = useState([]);
 
     const [context, contextOpen] = useState(false);
+    const contextToggle = () => contextOpen(!context);
+
     const [contextCoords, setContextCoords] = useState({
         x: 0,
         y: 0
     });
 
     useEffect(() => {
+        console.log("fetch data");
         const isAuthorize = () => {
             return account.isAuthorize()
                 .then(resp => resp.json())
@@ -36,11 +36,59 @@ const MyFolder = (props) => {
                 })
         }
 
+        const getFolders = (id) => {
+            folder.getMyFolder(id)
+                .then(resp => resp.json())
+                .then(json => setFolders(json));
+        }
+
+        const getFiles = (id) => {
+            file.getMyFiles(id)
+                .then(resp => resp.json())
+                .then(json => setFiles(json));
+        }
+
         if (props.match.params.id !== undefined)
             setCurrentFolder(props.match.params.id);
 
-        isAuthorize()
+        isAuthorize().then(() => {
+            let id = props.match.params.id === undefined ? "" : props.match.params.id;
+            getFolders(id);
+            getFiles(id);
+        })
     }, []);
+
+    const addFile = (file = {}) => {
+        let old = [...files];
+        old.push(file);
+        setFiles(old);
+    }
+
+    const updateFile = (file = {}) => {
+        let old = [...files];
+        let updatedFile = old.find(p => p.id === file.id);
+        updatedFile.id = file.id;
+        updatedFile.name = file.name;
+        updatedFile.content = file.content;
+        updatedFile.parentId = file.parentId;
+        setFiles(old);
+    }
+
+    const removeFile = (id) => {
+        let old = [...files];
+        setFiles(old.filter(p => p.id !== id));
+    }
+
+    const addFolder = (folder = {}) => {
+        let old = [...folders];
+        old.push(folder);
+        setFolders(old);
+    }
+
+    const removeFolder = (id) => {
+        let old = [...folders];
+        setFolders(old.filter(p => p.id !== id))
+    }
 
     const onClick = () => {
         contextOpen(false);
@@ -68,7 +116,7 @@ const MyFolder = (props) => {
                         key={item.id}
                         id={item.id}
                         name={item.name}
-                        remove={foldersApi.remove}
+                        remove={removeFolder}
                     />)}
                 {files.map(item =>
                     <File
@@ -76,16 +124,17 @@ const MyFolder = (props) => {
                         id={item.id}
                         name={item.name}
                         parentId={currentFolder}
-                        update={filesApi.update}
-                        remove={filesApi.remove}
+                        update={updateFile}
+                        remove={removeFile}
                     />)}
             </div>
             <ContextMenu
                 id={currentFolder}
                 isOpen={context}
+                toggle={contextToggle}
                 coords={contextCoords}
-                addFile={filesApi.add}
-                addFolder={foldersApi.add}
+                addFile={addFile}
+                addFolder={addFolder}
             />
         </>
     );
