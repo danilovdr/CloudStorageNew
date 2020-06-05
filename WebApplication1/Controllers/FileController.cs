@@ -1,10 +1,12 @@
 ﻿using CloudStorage.BLL.Interfaces.DTO;
 using CloudStorage.BLL.Interfaces.Services;
+using CloudStorage.DAL.Interfaces.Models;
 using CloudStorage.WEB.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace CloudStorage.WEB.Controllers
 {
@@ -58,6 +60,25 @@ namespace CloudStorage.WEB.Controllers
             FileDTO file = _fileService.GetFile(fileId, userId);
             return Json(file);
         }
+
+        [Authorize]
+        [HttpGet("/my/{parentId?}")]
+        public IActionResult GetMyFiles(Guid? parentId)
+        {
+            Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());
+            List<FileDTO> files = _fileService.GetMyFiles(parentId, userId);
+            return Json(files);
+        }
+
+        [Authorize]
+        [HttpGet("/shared/{parentId?}")]
+        public IActionResult GetSharedFiles(Guid? parentId)
+        {
+            Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());
+            List<FileDTO> files = _fileService.GetSharedFiles(parentId, userId);
+            return Json(files);
+        }
+
 
         [Authorize]
         [HttpDelete("{fileId}")]

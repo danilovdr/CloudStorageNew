@@ -38,7 +38,7 @@ const Settings = (props) => {
         : setPermission("Edit")
 
     const addPermission = () => {
-        permissionValue.add(props.id, username, permissionValue);
+        permission.add(props.id, username, permissionValue);
     };
 
     const [accessUsers, setAccessUsers] = useState([]);
@@ -58,62 +58,59 @@ const Settings = (props) => {
     }, [props.isOpen]);
 
     return (
-        <>
-            {/* <button className="dropdown-item" onClick={modalToggle}>Настройки</button> */}
-            <Modal style={modalStyle} isOpen={props.isOpen}>
-                <ModalHeader>Настройки</ModalHeader>
-                <ModalBody>
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <Input className="w-100" placeholder="Имя пользователя.." onChange={e => setUsername(e.target.value)} />
-                                </th>
-                                <th>
-                                    <UncontrolledDropdown>
-                                        <DropdownToggle style={btnStyle}>
-                                            {getPermission()}
-                                        </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem onClick={() => togglePermission("Просмотр")}>
-                                                Просмотр
+        <Modal style={modalStyle} isOpen={props.isOpen}>
+            <ModalHeader>Настройки</ModalHeader>
+            <ModalBody>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <Input className="w-100" placeholder="Имя пользователя.." onChange={e => setUsername(e.target.value)} />
+                            </th>
+                            <th>
+                                <UncontrolledDropdown>
+                                    <DropdownToggle style={btnStyle}>
+                                        {getPermission()}
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem onClick={() => togglePermission("Просмотр")}>
+                                            Просмотр
                                         </DropdownItem>
-                                            <DropdownItem onClick={() => togglePermission("Редактирование")}>
-                                                Редактирование
+                                        <DropdownItem onClick={() => togglePermission("Редактирование")}>
+                                            Редактирование
                                         </DropdownItem>
-                                        </DropdownMenu>
-                                    </UncontrolledDropdown>
-                                </th>
-                                <th>
-                                    <Button style={btnStyle} onClick={addPermission}>
-                                        Добавить
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                            </th>
+                            <th>
+                                <Button style={btnStyle} onClick={addPermission}>
+                                    Добавить
                                     </Button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {accessUsers.map(user =>
-                                <Permission
-                                    key={user.id}
-                                    permission="Access"
-                                    name={user.name}
-                                />)}
-                            {editUsers.map(user =>
-                                <Permission
-                                    key={user.id}
-                                    permission="Edit"
-                                    name={user.name}
-                                />)}
-                        </tbody>
-                    </Table>
-                </ModalBody>
-                <ModalFooter>
-                    <Button outline onClick={() => props.setIsOpen(false)}>
-                        Закрыть
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {accessUsers.map(user =>
+                            <Permission
+                                key={user.id}
+                                permission="Access"
+                                name={user.name}
+                            />)}
+                        {editUsers.map(user =>
+                            <Permission
+                                key={user.id}
+                                permission="Edit"
+                                name={user.name}
+                            />)}
+                    </tbody>
+                </Table>
+            </ModalBody>
+            <ModalFooter>
+                <Button outline onClick={() => props.setIsOpen(false)}>
+                    Закрыть
                     </Button>
-                </ModalFooter>
-            </Modal>
-        </>
+            </ModalFooter>
+        </Modal>
     )
 }
 

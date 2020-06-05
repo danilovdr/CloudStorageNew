@@ -1,23 +1,12 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import './App.css';
-import { Route, useHistory, Redirect } from 'react-router-dom';
-import { url } from './configuration';
+import { Route, Redirect } from 'react-router-dom';
 import Authorization from './pages/authorization';
 import Register from './pages/register';
 import MyFolder from './pages/myFolder';
-import ShareFolder from './pages/shareFolder';
+import SharedFolder from './pages/shareFolder';
 
 const App = () => {
-  // const history = useHistory();
-  // useEffect(() => {
-  //   const isAuthorize = () => {
-  //     fetch(url + "account/isAuthorize")
-  //       .then(resp => resp.json())
-  //       .then(data => data ? history.push("/folder/my") : history.push("/authorize"));
-  //   }
-  //   isAuthorize();
-  // }, [history])
-
   return (
     <div className="App">
       <Redirect from="/" to="/folder/my" />
@@ -25,8 +14,8 @@ const App = () => {
       <Route exact path="/register" component={Register} />
       <Route exact path="/folder/my" component={MyFolder} />
       <Route exact path="/folder/my/:id" component={MyFolder} />
-      <Route exact path="/folder/share" component={ShareFolder} />
-      <Route exact path="/folder/share:id" component={ShareFolder} />
+      <Route exact path="/folder/shared" component={SharedFolder} />
+      <Route exact path="/folder/shared/:id" component={SharedFolder} />
     </div>
   );
 }

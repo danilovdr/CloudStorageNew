@@ -4,7 +4,9 @@ using CloudStorage.DAL.Interfaces.Interfaces;
 using CloudStorage.DAL.Interfaces.Models;
 using CloudStorage.DomainModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace CloudStorage.BLL.Services
 {
@@ -141,6 +143,58 @@ namespace CloudStorage.BLL.Services
                 Content = fileModel.Content,
                 ParentId = fileModel.ParentId
             };
+        }
+
+        public List<FileDTO> GetMyFiles(Guid? parentId, Guid userId)
+        {
+            List<FileDTO> files = new List<FileDTO>();
+            List<FilePermissionModel> filePermissions = _unitOfWork.FilePermissionRepository
+                .Find(p => p.UserId == userId)
+                .ToList();
+
+            foreach (FilePermissionModel filePermission in filePermissions)
+            {
+                FileModel fileModel = _unitOfWork.FileRepository.Get(filePermission.FileId);
+                if (fileModel.ParentId == parentId)
+                {
+                    FileDTO fileDTO = new FileDTO()
+                    {
+                        Id = fileModel.Id,
+                        Name = fileModel.Name,
+                        Content = fileModel.Content,
+                        ParentId = fileModel.ParentId
+                    };
+                    files.Add(fileDTO);
+                }
+            }
+
+            return files;
+        }
+
+        public List<FileDTO> GetSharedFiles(Guid? parentId, Guid userId)
+        {
+            List<FileDTO> files = new List<FileDTO>();
+            List<FilePermissionModel> fpm = _unitOfWork.FilePermissionRepository
+             .Find(p =>
+                p.File.ParentId == parentId &&
+                p.UserId == userId &&
+                p.Value != PermissionType.None)
+             .ToList();
+
+            foreach (FilePermissionModel file in fpm)
+            {
+                FileModel fileModel = _unitOfWork.FileRepository.Get(file.Id);
+                FileDTO folderDTO = new FileDTO()
+                {
+                    Id = fileModel.Id,
+                    Name = fileModel.Name,
+                    Content = fileModel.Content,
+                    ParentId = fileModel.ParentId
+                };
+                files.Add(folderDTO);
+            }
+
+            return files;
         }
     }
 }

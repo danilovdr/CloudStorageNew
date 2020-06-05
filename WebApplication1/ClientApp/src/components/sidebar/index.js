@@ -5,19 +5,28 @@ import {
     CardBody,
     Button
 } from 'reactstrap'
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
         <Card className="border-0" style={{ width: "250px" }}>
             <CardBody>
-                <Button
-                    className="w-100"
-                    color="info"
-                >Мои файлы</Button>
-                <Button
-                    className="w-100 mt-3"
-                    color="info"
-                >Доступные файлы</Button>
+                <NavLink to="/folder/my">
+                    <Button
+                        className="w-100"
+                        color="info"
+                    >
+                        Мои файлы
+                    </Button>
+                </NavLink>
+                <NavLink to="/folder/shared">
+                    <Button
+                        className="w-100 mt-3"
+                        color="info"
+                    >
+                        Доступные файлы
+                    </Button>
+                </NavLink>
             </CardBody>
         </Card>
     )

@@ -40,13 +40,8 @@ namespace CloudStorage.WEB.Controllers
         public IActionResult GetMyFolder(Guid? folderId)
         {
             Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());
-            List<FolderDTO> foldersDTO = _folderService.GetUserFolders(folderId, userId);
-            List<FileDTO> filesDTO = _folderService.GetUserFiles(folderId, userId);
-            return Json(new
-            {
-                Folders = foldersDTO,
-                Files = filesDTO
-            });
+            List<FolderDTO> folders = _folderService.GetMyFolders(folderId, userId);
+            return Json(folders);
         }
 
         [Authorize]
@@ -54,13 +49,8 @@ namespace CloudStorage.WEB.Controllers
         public IActionResult GetSharedFolder(Guid? folderId)
         {
             Guid userId = Guid.Parse(HttpContext.User.Identity.GetUserId());
-            List<FolderDTO> foldersDTO = _folderService.GetSharedFolders(folderId, userId);
-            List<FileDTO> filesDTO = _folderService.GetSharedFiles(folderId, userId);
-            return Json(new
-            {
-                Folders = foldersDTO,
-                Files = filesDTO
-            });
+            List<FolderDTO> folders = _folderService.GetSharedFolders(folderId, userId);
+            return Json(folders);
         }
 
         [Authorize]

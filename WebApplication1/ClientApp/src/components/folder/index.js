@@ -32,6 +32,7 @@ const FolderIcon = (props) => {
     const contextMenu = e => {
         e.preventDefault();
         dropdownToggle();
+        e.stopPropagation()
     };
 
     return (

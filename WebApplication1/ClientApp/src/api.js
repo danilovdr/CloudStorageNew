@@ -80,8 +80,8 @@ export const folder = {
     getMyFolder: (id) => {
         return fetch(getUrl() + "folder/my/" + id)
     },
-    getShareFolder: (id) => {
-        return fetch(getUrl() + "folder/share/" + id)
+    getSharedFolder: (id) => {
+        return fetch(getUrl() + "folder/shared/" + id)
     }
 }
 
