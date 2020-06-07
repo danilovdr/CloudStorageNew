@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { permission } from '../../api';
+import { permission } from '../../../../api';
 import {
     Modal,
     ModalHeader,
@@ -14,7 +14,7 @@ import {
     ModalBody,
     Table
 } from 'reactstrap';
-import Permission from '../permission';
+import Permission from './permission';
 
 const Settings = (props) => {
     const modalStyle = {

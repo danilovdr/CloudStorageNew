@@ -8,10 +8,10 @@ import {
     DropdownMenu,
     DropdownItem
 } from 'reactstrap';
-import Settings from '../../../../components/header/settings';
+import Settings from './settings';
 import ConfirmRemove from './confirmRemove';
 
-const FolderIcon = (props) => {
+const Folder = (props) => {
     const iconStyle = {
         width: "100px"
     };
@@ -81,4 +81,4 @@ const FolderIcon = (props) => {
     )
 }
 
-export default FolderIcon;
+export default Folder;

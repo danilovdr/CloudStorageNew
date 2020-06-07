@@ -1,59 +1,130 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
-import { account } from '../../../api';
-import Folder from './folder';
-import File from './file';
-import useFolders from './useFolders';
-import useFiles from './useFiles';
+import { account, folder, file } from '../../../api';
+import Folder from './folder/';
+import File from './file/';
+import ContextMenu from './contextMenu/';
 
 const SharedFolder = (props) => {
+    const style = {
+        height: "800px"
+    };
+
     const history = useHistory();
     const [currentFolder, setCurrentFolder] = useState(null);
 
-    const [folders, foldersApi] = useFolders(currentFolder);
-    const [files, filesApi] = useFiles(currentFolder);
+    const [folders, setFolders] = useState([]);
+    const [files, setFiles] = useState([]);
+
+    const [context, contextOpen] = useState(false);
+    const contextToggle = () => contextOpen(!context);
+
+    const [contextCoords, setContextCoords] = useState({
+        x: 0,
+        y: 0
+    });
 
     useEffect(() => {
+        console.log("fetch data");
         const isAuthorize = () => {
             return account.isAuthorize()
                 .then(resp => resp.json())
                 .then(json => {
                     if (!json)
-                        throw new Error();
+                        history.push("/authorize")
                 })
+        }
+
+        const getFolders = (id) => {
+            folder.getSharedFolders(id)
+                .then(resp => resp.json())
+                .then(json => setFolders(json));
+        }
+
+        const getFiles = (id) => {
+            file.getSharedFiles(id)
+                .then(resp => resp.json())
+                .then(json => setFiles(json));
         }
 
         if (props.match.params.id !== undefined)
             setCurrentFolder(props.match.params.id);
 
-        isAuthorize()
-            .then(() => {
-                foldersApi.fetch()
-                filesApi.fetch();
-            })
-            .catch(() => history.push("/authorize"))
+        isAuthorize().then(() => {
+            let id = props.match.params.id === undefined ? "" : props.match.params.id;
+            console.log(id);
+            getFolders(id);
+            getFiles(id);
+        })
     }, []);
 
+    const addFile = (file = {}) => {
+        let old = [...files];
+        old.push(file);
+        setFiles(old);
+    }
+
+    const updateFile = (file = {}) => {
+        let old = [...files];
+        let updatedFile = old.find(p => p.id === file.id);
+        updatedFile.id = file.id;
+        updatedFile.name = file.name;
+        updatedFile.content = file.content;
+        updatedFile.parentId = file.parentId;
+        setFiles(old);
+    }
+
+    const removeFile = (id) => {
+        let old = [...files];
+        setFiles(old.filter(p => p.id !== id));
+    }
+
+    const onClick = () => {
+        contextOpen(false);
+    }
+
+    const onContextMenu = (event) => {
+        event.preventDefault();
+        setContextCoords({
+            left: event.clientX,
+            top: event.clientY
+        })
+        contextOpen(true);
+    }
+
     return (
-        <div className="w-100 d-flex justify-content-start flex-wrap">
-            {folders.map(item =>
-                <Folder
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    remove={foldersApi.remove}
-                />)}
-            {files.map(item =>
-                <File
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    parentId={currentFolder}
-                    update={filesApi.update}
-                    remove={filesApi.remove}
-                />)}
-        </div>
+        <>
+            <div
+                style={style}
+                className="w-100 d-flex justify-content-start flex-wrap"
+                onClick={onClick}
+                onContextMenu={onContextMenu}
+            >
+                {folders.map(item =>
+                    <Folder
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                    />)}
+                {files.map(item =>
+                    <File
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        parentId={currentFolder}
+                        update={updateFile}
+                        remove={removeFile}
+                    />)}
+            </div>
+            {/* <ContextMenu
+                id={currentFolder}
+                isOpen={context}
+                toggle={contextToggle}
+                coords={contextCoords}
+                addFile={addFile}
+            /> */}
+        </>
     );
 }
 

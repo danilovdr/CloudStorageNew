@@ -48,7 +48,7 @@ export const file = {
         return fetch(getUrl() + "file/my/" + parentId)
     },
     getSharedFiles: (parentId) => {
-        return fetch(getUrl(), "file/shared/" + parentId)
+        return fetch(getUrl() + "file/shared/" + parentId)
     },
     update: (file = {}) => {
         return fetch(getUrl() + "file/update", {
@@ -83,10 +83,10 @@ export const folder = {
             })
         })
     },
-    getMyFolder: (id) => {
+    getMyFolders: (id) => {
         return fetch(getUrl() + "folder/my/" + id)
     },
-    getSharedFolder: (id) => {
+    getSharedFolders: (id) => {
         return fetch(getUrl() + "folder/shared/" + id)
     },
     remove: id => {

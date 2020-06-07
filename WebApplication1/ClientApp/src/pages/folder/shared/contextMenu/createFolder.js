@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { folder } from '../../api';
+import { folder } from '../../../../api';
 import {
     Modal,
     ModalHeader,
@@ -13,9 +13,6 @@ import {
 } from 'reactstrap';
 
 const CreateFolder = (props) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleIsOpen = () => setIsOpen(!isOpen);
-
     const [name, setName] = useState("");
     const [errorText, setErrorText] = useState("");
     const [errorVisible, setErrorVisible] = useState(false);
@@ -32,25 +29,22 @@ const CreateFolder = (props) => {
 
     const submit = () => {
         hiddenError();
-       
-
+        folder.create(name, props.id)
+            .then(resp => resp.json())
+            .then(json => props.addFolder(json));
+        close();
     };
 
     const close = () => {
         hiddenError();
         setName("");
-        setIsOpen(false)
+        props.toggle()
     }
 
     return (
         <>
-            <Button
-                className="ml-3"
-                color="info"
-                onClick={toggleIsOpen}>
-                Создать папку
-            </Button>
-            <Modal isOpen={isOpen}>
+           
+            <Modal isOpen={props.isOpen}>
                 <ModalHeader>Создать папку</ModalHeader>
                 <ModalBody>
                     <Alert color="danger" hidden={!errorVisible}>{errorText}</Alert>

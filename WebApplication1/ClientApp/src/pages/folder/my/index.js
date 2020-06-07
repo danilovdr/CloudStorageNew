@@ -26,7 +26,6 @@ const MyFolder = (props) => {
     });
 
     useEffect(() => {
-        console.log("fetch data");
         const isAuthorize = () => {
             return account.isAuthorize()
                 .then(resp => resp.json())
@@ -37,7 +36,7 @@ const MyFolder = (props) => {
         }
 
         const getFolders = (id) => {
-            folder.getMyFolder(id)
+            folder.getMyFolders(id)
                 .then(resp => resp.json())
                 .then(json => setFolders(json));
         }

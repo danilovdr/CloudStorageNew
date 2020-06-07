@@ -5,18 +5,20 @@ import { Route } from 'react-router-dom';
 import Header from './header';
 import MyFolder from './my';
 import SharedFolder from './shared';
+import Sidebar from './sidebar';
 
 const Folder = () => {
     return (
-        <>
+        <Container className="p-0" fluid>
             <Header />
-            <Container fluid>
+            <div className="d-flex">
+                <Sidebar />
                 <Route exact path="/folder/my/" component={MyFolder} />
                 <Route exact path="/folder/my/:id" component={MyFolder} />
                 <Route exact path="/folder/shared/" component={SharedFolder} />
                 <Route exact path="/folder/shared/:id" component={SharedFolder} />
-            </Container>
-        </>
+            </div>
+        </Container>
     )
 }
 

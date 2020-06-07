@@ -14,7 +14,6 @@ import {
 } from 'reactstrap';
 import img from '../../../../img/file.png';
 import { file } from '../../../../api';
-import Settings from './settings';
 import ConfirmRemove from './confirmRemove';
 
 const File = (props) => {
@@ -79,8 +78,6 @@ const File = (props) => {
         event.stopPropagation()
     }
 
-
-
     return (
         <>
             <Dropdown
@@ -95,9 +92,6 @@ const File = (props) => {
                     {props.name}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem onClick={settingsToggle}>
-                        Настройки
-                    </DropdownItem>
                     <DropdownItem onClick={remove}>
                         Удалить
                     </DropdownItem>
@@ -124,11 +118,6 @@ const File = (props) => {
                 </ModalFooter>
             </Modal>
             {/* Settings */}
-            <Settings
-                id={props.id}
-                isOpen={settings}
-                toggle={settingsToggle}
-            />
             {/* Remove */}
             <ConfirmRemove
                 id={props.id}
